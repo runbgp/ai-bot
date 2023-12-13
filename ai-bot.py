@@ -1,7 +1,9 @@
+import os
 import discord
 from openai import OpenAI
+from dotenv import load_dotenv
 
-description = '''A Discord bot that uses the OpenAI API to interact with LLMs from Discord.'''
+description = '''A Discord bot that uses an OpenAI API-compatible API to interact with LLMs from Discord.'''
 
 load_dotenv()
 
