@@ -3,6 +3,7 @@ import discord
 from openai import OpenAI
 from dotenv import load_dotenv
 from datetime import datetime
+import asyncio
 
 description = '''A Discord bot that uses an OpenAI API-compatible API to interact with LLMs from Discord.'''
 
@@ -32,16 +33,20 @@ class AIBot(discord.Client):
         if self.user in message.mentions:
             async with message.channel.typing():
                 user_message_content = f"{message.author.name}: {message.content}"
-                chat_response = openai_client.chat.completions.create(
+                
+                loop = asyncio.get_event_loop()
+                chat_response = await loop.run_in_executor(None, lambda: openai_client.chat.completions.create(
                     model=model,
                     messages=[
                         {"role": "system", "content": prompt},
                         {"role": "user", "content": user_message_content},
                     ]
-                )
+                ))
+
                 response_content = chat_response.choices[0].message.content
-                for i in range(0, len(response_content), 2000):
-                    await message.channel.send(f'{message.author.mention} {response_content[i:i+2000]}')
+                mention = f'{message.author.mention} '
+                for i in range(0, len(response_content), 2000 - len(mention)):
+                    await message.channel.send(f'{mention}{response_content[i:i+2000-len(mention)]}')
 
 discord_client = AIBot(intents=intents)
 discord_client.run(discord_bot_token)
