@@ -2,6 +2,7 @@ import os
 import discord
 from openai import OpenAI
 from dotenv import load_dotenv
+from datetime import datetime
 
 description = '''A Discord bot that uses an OpenAI API-compatible API to interact with LLMs from Discord.'''
 
@@ -29,16 +30,18 @@ class AIBot(discord.Client):
             return
 
         if self.user in message.mentions:
-            chat_response = openai_client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": prompt},
-                    {"role": "user", "content": message.content},
-                ]
-            )
-            response_content = chat_response.choices[0].message.content
-            for i in range(0, len(response_content), 2000):
-                await message.channel.send(response_content[i:i+2000])
+            async with message.channel.typing():
+                user_message_content = f"{message.author.name}: {message.content}"
+                chat_response = openai_client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": prompt},
+                        {"role": "user", "content": user_message_content},
+                    ]
+                )
+                response_content = chat_response.choices[0].message.content
+                for i in range(0, len(response_content), 2000):
+                    await message.channel.send(f'{message.author.mention} {response_content[i:i+2000]}')
 
 discord_client = AIBot(intents=intents)
 discord_client.run(discord_bot_token)

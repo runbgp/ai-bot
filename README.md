@@ -1,6 +1,6 @@
 # AI Bot
 
-AI Bot is Discord bot that uses an OpenAI API-compatible API to interact with LLMs from Discord.
+AI Bot is a Discord bot that uses an OpenAI API-compatible API to interact with LLMs from Discord.
 
 ## Running the bot
 
