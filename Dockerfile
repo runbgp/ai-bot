@@ -7,4 +7,4 @@ WORKDIR /ai-bot
 
 RUN pip3 install -r requirements.txt
 
-CMD ["python3", "ai-bot.py"]
+CMD ["python3", "aibot.py"]

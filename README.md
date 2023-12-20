@@ -1,6 +1,6 @@
-# AI Bot
+# AIBot
 
-AI Bot is a Discord bot that uses an OpenAI API-compatible API to interact with LLMs from Discord.
+AIBot is a Discord bot that uses an OpenAI API-compatible API to interact with LLMs from Discord.
 
 ## Running the bot
 
@@ -12,7 +12,7 @@ AI Bot is a Discord bot that uses an OpenAI API-compatible API to interact with 
     - `openai_api_key`: Your OpenAI API key.
     - `model`: Your model.
     - `prompt`: Your prompt.
-4. Run the bot. `python3 ai-bot.py`
+4. Run the bot. `python3 aibot.py`
 
 ## Running with Docker
 
@@ -24,9 +24,9 @@ version: '3.8'
 
 services:
   ai-bot:
-    image: ghcr.io/runbgp/ai-bot:latest
+    image: ghcr.io/runbgp/aibot:latest
     restart: unless-stopped
-    container_name: ai-bot
+    container_name: aibot
     volumes:
       - .env:/.env
 ```
@@ -36,7 +36,7 @@ services:
     - `openai_api_key`: Your OpenAI API key.
     - `model`: Your model.
     - `prompt`: Your prompt.
-3. Pull the latest container. `docker pull ghcr.io/runbgp/ai-bot:latest`
+3. Pull the latest container. `docker pull ghcr.io/runbgp/aibot:latest`
 4. Run the bot. `docker compose up -d`
 
 ## Contributing

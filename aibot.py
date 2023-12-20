@@ -21,8 +21,13 @@ openai_client = OpenAI(
 )
 
 intents = discord.Intents.default()
+intents.message_content = True
 
 class AIBot(discord.Client):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.custom_prompts = {}
+
     async def on_ready(self):
         print('Logged on as', self.user)
 
@@ -30,7 +35,24 @@ class AIBot(discord.Client):
         if message.author == self.user:
             return
 
+        if message.content.startswith('#prompt'):
+            _, *args = message.content.split()
+            if args:
+                if args[0] == 'reset':
+                    self.custom_prompts[message.guild.id] = prompt
+                    await message.channel.send('Prompt has been reset to default.')
+                else:
+                    self.custom_prompts[message.guild.id] = ' '.join(args)
+                    await message.channel.send(f'Custom prompt has been set: ```{self.custom_prompts[message.guild.id]}```')
+            else:
+                current_prompt = self.custom_prompts.get(message.guild.id, prompt)
+                await message.channel.send('Usage: `#prompt [reset|your custom prompt]`')
+                await message.channel.send(f'Current prompt: ```{current_prompt}```')
+            return
+
         if self.user in message.mentions:
+            guild_prompt = self.custom_prompts.get(message.guild.id, prompt)
+
             async with message.channel.typing():
                 user_message_content = f"{message.author.name}: {message.content}"
                 
@@ -38,7 +60,7 @@ class AIBot(discord.Client):
                 chat_response = await loop.run_in_executor(None, lambda: openai_client.chat.completions.create(
                     model=model,
                     messages=[
-                        {"role": "system", "content": prompt},
+                        {"role": "system", "content": guild_prompt},
                         {"role": "user", "content": user_message_content},
                     ]
                 ))
