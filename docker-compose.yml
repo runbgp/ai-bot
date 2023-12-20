@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  ai-bot:
+  aibot:
     image: ghcr.io/runbgp/ai-bot:latest
     restart: unless-stopped
-    container_name: ai-bot
+    container_name: aibot
     volumes:
       - .env:/.env
