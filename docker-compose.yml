@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   aibot:
-    image: ghcr.io/runbgp/ai-bot:latest
+    image: ghcr.io/runbgp/aibot:latest
     restart: unless-stopped
     container_name: aibot
     volumes:
